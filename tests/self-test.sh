@@ -31,7 +31,24 @@ fi
 expect_fail unsigned_publish_fails 'not signed' "$root/scripts/check-signed.sh" "$work/a"
 echo '{"mediaType":"application/vnd.dev.sigstore.bundle.v0.3+json"}' > "$work/a/index.json.sigstore.json"
 echo '{"mediaType":"application/vnd.dev.sigstore.bundle.v0.3+json"}' > "$work/a/revocations.json.sigstore.json"
-expect_fail wrongly_signed_publish_fails '.' "$root/scripts/check-signed.sh" "$work/a"
+expect_fail malformed_bundle_publish_fails '.' "$root/scripts/check-signed.sh" "$work/a"
+
+# Real signatures: sign the built index keylessly as this workflow, then the
+# check passes for this workflow's identity and fails for the publish
+# workflow's, which is the identity agentd pins. Needs an OIDC token, so it
+# runs in self-test.yml (SELF_TEST_SIGN=1) and is skipped elsewhere.
+if [ "${SELF_TEST_SIGN:-}" = "1" ] && [ -n "${ACTIONS_ID_TOKEN_REQUEST_URL:-}" ]; then
+  for file in index.json revocations.json; do
+    cosign sign-blob --yes --bundle "$work/b/$file.sigstore.json" "$work/b/$file" >/dev/null 2>&1
+  done
+  self_identity="https://github.com/${GITHUB_WORKFLOW_REF:?}"
+  expect_ok signed_by_the_expected_identity env LOAMS_INDEX_IDENTITY="$self_identity" "$root/scripts/check-signed.sh" "$work/b"
+  expect_fail wrong_signer_publish_fails 'none of the expected identities' "$root/scripts/check-signed.sh" "$work/b"
+    printf ' ' >> "$work/b/index.json"
+  expect_fail tampered_index_publish_fails 'error|failed|invalid' env LOAMS_INDEX_IDENTITY="$self_identity" "$root/scripts/check-signed.sh" "$work/b"
+else
+  echo "self-test real-signature cases: skipped (no OIDC token)"
+fi
 
 repo="$work/repo"
 git init -q "$repo"

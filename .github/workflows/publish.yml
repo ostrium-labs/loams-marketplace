@@ -12,6 +12,11 @@ on:
 permissions:
   contents: read
 
+# bash with pipefail, so a failing command before a pipe fails its step.
+defaults:
+  run:
+    shell: bash
+
 concurrency:
   group: publish
   cancel-in-progress: false

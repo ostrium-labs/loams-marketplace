@@ -11,6 +11,11 @@ on:
 permissions:
   contents: read
 
+# bash with pipefail, so a failing command before a pipe fails its step.
+defaults:
+  run:
+    shell: bash
+
 concurrency:
   group: validate-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
@@ -32,25 +37,37 @@ jobs:
         with:
           node-version: 24
       - name: loams-listing at the pinned Loams commit
+        id: setup
         run: scripts/setup-cli.sh
       - name: added listing versions (published ones are immutable)
+        id: changed
         env:
           BASE: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
         run: scripts/changed-listings.sh "$BASE" | tee "$RUNNER_TEMP/changed.txt"
       - name: lint every listing (first-party only in MK0)
+        id: lint
         run: |
           mapfile -t files < <(find listings -name listing.json | sort)
           if [ "${#files[@]}" -eq 0 ]; then echo "no listings yet"; exit 0; fi
           node "$LOAMS_LISTING" lint --first-party-only "${files[@]}" 2> >(tee "$RUNNER_TEMP/lint.log" >&2)
       - name: the index builds
+        id: build
         run: node "$LOAMS_LISTING" index build . --first-party-only --out "$RUNNER_TEMP/index"
       - name: artifacts, integrity and provenance of the added versions
+        id: verify
         run: |
           mapfile -t files < "$RUNNER_TEMP/changed.txt"
           if [ "${#files[@]}" -eq 0 ]; then echo "[]" > "$RUNNER_TEMP/verify.json"; exit 0; fi
           node "$LOAMS_LISTING" verify "${files[@]}" --report "$RUNNER_TEMP/verify.json" --save-provenance "$RUNNER_TEMP/provenance"
       - name: report
         if: always()
+        env:
+          OUTCOMES: >-
+            setup=${{ steps.setup.outcome }}
+            changed=${{ steps.changed.outcome }}
+            lint=${{ steps.lint.outcome }}
+            build=${{ steps.build.outcome }}
+            verify=${{ steps.verify.outcome }}
         run: |
           node scripts/report.mjs "$RUNNER_TEMP/verify.json" "$RUNNER_TEMP/lint.log" > "$RUNNER_TEMP/report.md"
           cat "$RUNNER_TEMP/report.md" >> "$GITHUB_STEP_SUMMARY"

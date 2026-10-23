@@ -12,9 +12,19 @@ on:
 permissions:
   contents: read
 
+# bash with pipefail, so a failing command before a pipe fails its step.
+defaults:
+  run:
+    shell: bash
+
 jobs:
   self-test:
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      # To sign a fixture keylessly as this workflow, so the signer check is
+      # tested with real signatures (no token on fork pull requests: skipped).
+      id-token: write
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -32,3 +42,5 @@ jobs:
       - name: loams-listing at the pinned Loams commit
         run: scripts/setup-cli.sh
       - run: tests/self-test.sh
+        env:
+          SELF_TEST_SIGN: '1'
