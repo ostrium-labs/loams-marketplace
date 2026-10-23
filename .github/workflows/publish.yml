@@ -1,0 +1,73 @@
+# Builds the index on main, signs it with Sigstore keyless signing as this
+# workflow, checks the signature, and publishes it to GitHub Pages (design 73
+# section 5, D1460, D1461; plan MK1 Task 3). agentd pins this workflow's
+# identity: https://github.com/ostrium-labs/loams-marketplace/.github/workflows/publish.yml@refs/heads/main
+name: publish
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: build and sign the index
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.0
+        with:
+          version: 11.27.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+      - name: loams-listing at the pinned Loams commit
+        run: scripts/setup-cli.sh
+      - name: build index.json and revocations.json
+        run: node "$LOAMS_LISTING" index build . --first-party-only --source-commit "$GITHUB_SHA" --out site
+      - uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+        with:
+          cosign-release: v3.0.6
+      - name: sign (keyless, as this workflow)
+        run: |
+          for file in index.json revocations.json; do
+            cosign sign-blob --yes --bundle "site/$file.sigstore.json" "site/$file"
+          done
+      - name: refuse an unsigned or wrongly signed index
+        run: scripts/check-signed.sh site
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: marketplace-index
+          path: site
+          retention-days: 90
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: site
+
+  deploy:
+    name: GitHub Pages
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

@@ -1,0 +1,85 @@
+# Checks a submission (design 73 section 5; plan MK1 Task 3): lint and the
+# first-party namespace rule on every listing, a dry index build, and for each
+# added version the artifact's bytes and Sigstore provenance. LAPC Core joins
+# when its runner ships (MK1 Task 8).
+name: validate
+
+on:
+  pull_request:
+  merge_group:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: listings
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.0
+        with:
+          version: 11.27.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+      - name: loams-listing at the pinned Loams commit
+        run: scripts/setup-cli.sh
+      - name: added listing versions (published ones are immutable)
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
+        run: scripts/changed-listings.sh "$BASE" | tee "$RUNNER_TEMP/changed.txt"
+      - name: lint every listing (first-party only in MK0)
+        run: |
+          mapfile -t files < <(find listings -name listing.json | sort)
+          if [ "${#files[@]}" -eq 0 ]; then echo "no listings yet"; exit 0; fi
+          node "$LOAMS_LISTING" lint --first-party-only "${files[@]}" 2> >(tee "$RUNNER_TEMP/lint.log" >&2)
+      - name: the index builds
+        run: node "$LOAMS_LISTING" index build . --first-party-only --out "$RUNNER_TEMP/index"
+      - name: artifacts, integrity and provenance of the added versions
+        run: |
+          mapfile -t files < "$RUNNER_TEMP/changed.txt"
+          if [ "${#files[@]}" -eq 0 ]; then echo "[]" > "$RUNNER_TEMP/verify.json"; exit 0; fi
+          node "$LOAMS_LISTING" verify "${files[@]}" --report "$RUNNER_TEMP/verify.json" --save-provenance "$RUNNER_TEMP/provenance"
+      - name: report
+        if: always()
+        run: |
+          node scripts/report.mjs "$RUNNER_TEMP/verify.json" "$RUNNER_TEMP/lint.log" > "$RUNNER_TEMP/report.md"
+          cat "$RUNNER_TEMP/report.md" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: listing-report
+          path: |
+            ${{ runner.temp }}/report.md
+            ${{ runner.temp }}/verify.json
+            ${{ runner.temp }}/provenance
+          if-no-files-found: ignore
+
+  comment:
+    name: report comment
+    needs: validate
+    if: always() && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: listing-report
+      - name: post or update the report
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          [ -f report.md ] || exit 0
+          gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body-file report.md --edit-last --create-if-none
