@@ -1,39 +1,42 @@
-# Loams Marketplace index
+# The Seed Exchange: the Loams Marketplace index
 
-The open index behind the Loams Marketplace: listings of **agents** (any framework, any language; Mastra is the first-class path), **harnesses** (coding agents that `loams-agentd` drives, usually over ACP) and **MCP servers**, which you install into your own Loams.
+This repository is the official index of the Loams Marketplace, the Seed Exchange (design [§73](https://github.com/ostrium-labs/loams/blob/dev/docs/design/73-agent-marketplace.md), plan [MK1](https://github.com/ostrium-labs/loams/blob/dev/docs/plans/2026-10-21-mk1-agent-marketplace.md)). Loams Desktop and `loams-agentd` read it to list agents, harnesses and MCP servers, and to install them into ground you own.
 
-- **Metadata only.** This repository holds listing manifests, never package bytes. Code stays on npm, PyPI, OCI registries and GitHub Releases, signed with provenance.
-- **Signed.** On every merge, CI builds `index.json` and `revocations.json` and signs them with Sigstore keyless signing from this repository's publish workflow. Loams installs verify that signature, each artifact's integrity hash and its provenance before anything is installed.
-- **Reviewed in the open.** A listing is a pull request. CI validates the manifest, checks provenance and licence, scans the package and runs the agent package conformance suite (LAPC), then posts a report.
-- **Federated.** This is the official source. Anyone can run their own index with the same layout, and a Loams install can add sources pinned to their signing identities.
-- **Free.** Every listing is free. There are no accounts and no install telemetry.
+**Status: experimental, first-party only.** MK0 accepts listings in the `ostrium` and `loams` namespaces. Third-party listings open in MK1, after Loams' sandbox lands.
 
-## Status
+## What is here
 
-**Experimental.** First-party listings only (namespaces `ostrium` and `loams`) until MK1. Third-party submissions open after that, with namespace verification and the sandbox.
+- **Metadata only.** A listing points at code on npm, PyPI, OCI registries or GitHub Releases. The code never lives here, and neither do package bytes.
+- **Signed.** On every push to `main`, `publish.yml` builds `index.json` and `revocations.json`. It signs both with Sigstore keyless signing, as this repository's publish workflow on `main`, and publishes them to GitHub Pages. agentd refuses an index whose signature or signing identity does not match:
+
+  ```
+  identity  https://github.com/ostrium-labs/loams-marketplace/.github/workflows/publish.yml@refs/heads/main
+  issuer    https://token.actions.githubusercontent.com
+  ```
+- **No accounts, no telemetry.** Nothing here records who installs what.
 
 ## Layout
 
-    listings/<namespace>/<name>/listing.json   the current manifest (schema: schemas/listing.v1.json)
-    listings/<namespace>/<name>/versions/      one file per published version
-    publishers/<namespace>.json                verified publisher records
-    revocations.json                           signed revocations (warn, disable)
-    schemas/                                   listing schema v1
+```
+listings/<namespace>/<name>/versions/<version>/listing.json   one listing version (schema listing/v1)
+listings/<namespace>/<name>/versions/<version>/yanked.json    {"reason": "..."}: no new installs
+listings/<namespace>/<name>/versions/<version>/provenance/    the provenance bundles CI verified
+revocations.json                                              warn or disable installed versions
+```
 
-## Install a listing
+The schemas live in the Loams repository under [`schemas/marketplace`](https://github.com/ostrium-labs/loams/tree/dev/schemas/marketplace). The tooling is `loams-listing` ([`agents/loams-listing`](https://github.com/ostrium-labs/loams/tree/dev/agents/loams-listing)), pinned by commit in [`.github/loams-ref`](.github/loams-ref).
 
-From Loams Desktop or the console, open **Marketplace**. From a terminal:
+## Submitting a listing
 
-    loams marketplace search <query>
-    loams marketplace install <namespace>/<name>
+A submission is a pull request that adds `listings/<namespace>/<name>/versions/<version>/listing.json`. For an npm package, generate the file with `loams-listing from-package <dir> --tarball <file>`. `validate.yml` then:
 
-The install screen is generated from the manifest. It shows the data, tools, network hosts, models and budget the listing asks for, and nothing is created until you confirm.
+1. lints the listing against the schema and the semantic rules (`loams-listing rules`);
+2. refuses namespaces other than `ostrium` and `loams` (MK0);
+3. resolves the artifact, checks its bytes against the listing's integrity, and verifies its Sigstore provenance. The provenance must name the listing's source repository, both in the signed statement and in the signing certificate;
+4. posts a report on the pull request.
 
-## Design
-
-- Design 73, The Loams Agent Marketplace: https://github.com/ostrium-labs/loams/blob/dev/docs/design/73-agent-marketplace.md
-- Plan MK1: https://github.com/ostrium-labs/loams/blob/dev/docs/plans/2026-10-21-mk1-agent-marketplace.md
+The Loams Agent Package Conformance run (LAPC Core) joins this check when its runner ships (MK1 Task 8). It does not run yet.
 
 ## Licence
 
-Apache-2.0. Each listed package keeps its own licence, which its listing declares.
+Apache-2.0. Each listed package keeps its own licence, shown on its listing.
