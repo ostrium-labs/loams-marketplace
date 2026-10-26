@@ -1,0 +1,37 @@
+{
+  "id": "ostrium/grok",
+  "kind": "harness",
+  "version": "1.0.0",
+  "title": "Grok",
+  "summary": "xAI's Grok CLI driven by agentd's built-in adapter. The vendor's CLI is installed separately.",
+  "description": "A first-party descriptor of one of agentd's built-in harness adapters (design 73 section 8, D1464). The listing describes Loams' adapter, which is Apache-2.0 and ships inside loams-agentd; the vendor's CLI is installed separately (Settings can run the vendor's official installer) and found on PATH or through its `*_EXECUTABLE` override. The vendor's software is separate, under its own licence and terms. agentd launches it as `grok --no-auto-update agent --no-leader stdio` and speaks ACP over stdio; sign-in is `grok login --device-auth`.",
+  "licence": "Apache-2.0",
+  "source": {
+    "repository": "https://github.com/ostrium-labs/loams",
+    "commit": "51708bb86e3d572c74285990c07cb972b05e5ff9",
+    "path": "crates/loams-agentd-harness/src/acp"
+  },
+  "publisher": {
+    "name": "Ostrium Labs",
+    "url": "https://ostriumlabs.org"
+  },
+  "support": "https://github.com/ostrium-labs/loams/issues",
+  "security_contact": "security@ostriumlabs.org",
+  "harness": {
+    "launch": {
+      "protocol": "native",
+      "command": "grok",
+      "args": [
+        "--no-auto-update",
+        "agent",
+        "--no-leader",
+        "stdio"
+      ]
+    },
+    "auth": [
+      "cli-login"
+    ],
+    "native_adapter": "grok"
+  },
+  "pricing": "free"
+}

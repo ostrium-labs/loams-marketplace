@@ -1,0 +1,823 @@
+{
+  "id": "ostrium/github-mcp-server",
+  "kind": "mcp-server",
+  "version": "2.0.3",
+  "title": "GitHub",
+  "summary": "GitHub's official MCP server: repositories, issues, pull requests, Actions, security alerts and more.",
+  "description": "github/github-mcp-server v2.0.3 (MIT), installed from its signed release archive and run locally as `github-mcp-server stdio` with a GitHub personal access token from agentd's vault. The tool list is every tool in the v2.0.3 source, including toolsets and feature-flagged tools that are off by default; tools that delete, merge or change rulesets always ask. The embedded server.json is the official MCP Registry entry for 2.0.3, unchanged; its OCI package waits for the oci runtime (MK2).",
+  "licence": "MIT",
+  "source": {
+    "repository": "https://github.com/github/github-mcp-server",
+    "commit": "b98d115bbb080e9555466a96656ec4df605aea21"
+  },
+  "publisher": {
+    "name": "GitHub",
+    "url": "https://github.com"
+  },
+  "support": "https://github.com/github/github-mcp-server/issues",
+  "artifact": {
+    "type": "archive",
+    "name": "github-mcp-server",
+    "version": "2.0.3",
+    "files": [
+      {
+        "platform": "linux-x86_64",
+        "url": "https://github.com/github/github-mcp-server/releases/download/v2.0.3/github-mcp-server_Linux_x86_64.tar.gz",
+        "sha256": "f797c20fe02a755865d0e2d46184ab47e31bf1619b0855b8d89c531e45a651c2",
+        "path": "github-mcp-server"
+      },
+      {
+        "platform": "linux-aarch64",
+        "url": "https://github.com/github/github-mcp-server/releases/download/v2.0.3/github-mcp-server_Linux_arm64.tar.gz",
+        "sha256": "5d2ddc71273fec8917e8f42cf19f26a6bd7acbb679b3a57de2917018b2eadf82",
+        "path": "github-mcp-server"
+      },
+      {
+        "platform": "darwin-x86_64",
+        "url": "https://github.com/github/github-mcp-server/releases/download/v2.0.3/github-mcp-server_Darwin_x86_64.tar.gz",
+        "sha256": "115350858c3287843274efbf45e821d98f15d3304cb2c074740461ed32b45598",
+        "path": "github-mcp-server"
+      },
+      {
+        "platform": "darwin-aarch64",
+        "url": "https://github.com/github/github-mcp-server/releases/download/v2.0.3/github-mcp-server_Darwin_arm64.tar.gz",
+        "sha256": "5c95c01f75a7ec2370607e989b2968d314b02a54d78af8a9fdf38f3dfe6135f4",
+        "path": "github-mcp-server"
+      },
+      {
+        "platform": "windows-x86_64",
+        "url": "https://github.com/github/github-mcp-server/releases/download/v2.0.3/github-mcp-server_Windows_x86_64.zip",
+        "sha256": "f0e1b9880a1b88730d1250d1c25cfee39617ec3e800a7a252f2279cd0c8394e0",
+        "path": "github-mcp-server.exe"
+      },
+      {
+        "platform": "windows-aarch64",
+        "url": "https://github.com/github/github-mcp-server/releases/download/v2.0.3/github-mcp-server_Windows_arm64.zip",
+        "sha256": "d1321c411023c9a08e7709c2e9689551e3bff5a57033a3e5ff5f2c1db0c67a6f",
+        "path": "github-mcp-server.exe"
+      }
+    ]
+  },
+  "provenance": {
+    "type": "github-attestation",
+    "ref": "https://api.github.com/repos/github/github-mcp-server/attestations"
+  },
+  "runtime": {
+    "kind": "binary"
+  },
+  "entrypoint": "github-mcp-server",
+  "tools": [
+    {
+      "name": "actions_get",
+      "description": "Get details about specific GitHub Actions resources.",
+      "risk": "read"
+    },
+    {
+      "name": "actions_list",
+      "description": "Tools for listing GitHub Actions resources.",
+      "risk": "read"
+    },
+    {
+      "name": "actions_run_trigger",
+      "description": "Trigger GitHub Actions workflow operations, including running, re-running, cancelling workflow runs, and deleting workflow run logs.",
+      "risk": "destructive"
+    },
+    {
+      "name": "add_comment_to_pending_review",
+      "description": "Add review comment to the requester's latest pending pull request review.",
+      "risk": "write"
+    },
+    {
+      "name": "add_issue_comment",
+      "description": "Add a comment and/or reaction to a specific issue or issue comment in a GitHub repository.",
+      "risk": "egress"
+    },
+    {
+      "name": "add_issue_comment_reaction",
+      "description": "Add a reaction to an issue or pull request comment.",
+      "risk": "write"
+    },
+    {
+      "name": "add_issue_reaction",
+      "description": "Add a reaction to an issue or pull request.",
+      "risk": "write"
+    },
+    {
+      "name": "add_pull_request_review_comment",
+      "description": "Add a review comment to the current user's pending pull request review.",
+      "risk": "write"
+    },
+    {
+      "name": "add_pull_request_review_comment_reaction",
+      "description": "Add a reaction to a pull request review comment.",
+      "risk": "write"
+    },
+    {
+      "name": "add_reply_to_pull_request_comment",
+      "description": "Add a reply and/or reaction to an existing pull request comment.",
+      "risk": "egress"
+    },
+    {
+      "name": "add_sub_issue",
+      "description": "Add a sub-issue to a parent issue.",
+      "risk": "write"
+    },
+    {
+      "name": "assign_copilot_to_issue",
+      "description": "Assign Copilot to a specific issue in a GitHub repository.",
+      "risk": "egress"
+    },
+    {
+      "name": "assign_copilot_to_issue_with_intent",
+      "description": "Assign Copilot to a specific issue in a GitHub repository.",
+      "risk": "egress"
+    },
+    {
+      "name": "create_branch",
+      "description": "Create a new branch in a GitHub repository",
+      "risk": "write"
+    },
+    {
+      "name": "create_gist",
+      "description": "Create a new gist",
+      "risk": "egress"
+    },
+    {
+      "name": "create_issue",
+      "description": "Create a new issue in a GitHub repository with a title and optional body.",
+      "risk": "egress"
+    },
+    {
+      "name": "create_or_update_file",
+      "description": "Create or update a single file in a GitHub repository.",
+      "risk": "egress"
+    },
+    {
+      "name": "create_pull_request",
+      "description": "Create a new pull request in a GitHub repository.",
+      "risk": "egress"
+    },
+    {
+      "name": "create_pull_request_review",
+      "description": "Create a review on a pull request.",
+      "risk": "egress"
+    },
+    {
+      "name": "create_repository",
+      "description": "Create a new GitHub repository in your account or specified organization",
+      "risk": "egress"
+    },
+    {
+      "name": "create_repository_ruleset",
+      "description": "Create a new ruleset at the repository, organization, or enterprise level",
+      "risk": "destructive"
+    },
+    {
+      "name": "custom_properties_read",
+      "description": "Read custom properties at the repository, organization, or enterprise level.",
+      "risk": "read"
+    },
+    {
+      "name": "custom_properties_write",
+      "description": "Create or update custom properties at the repository, organization, or enterprise level.",
+      "risk": "write"
+    },
+    {
+      "name": "delete_file",
+      "description": "Delete a file from a GitHub repository",
+      "risk": "destructive"
+    },
+    {
+      "name": "delete_pending_pull_request_review",
+      "description": "Delete a pending pull request review.",
+      "risk": "destructive"
+    },
+    {
+      "name": "delete_repository",
+      "description": "Delete a GitHub repository after the user confirms the exact owner/repository name",
+      "risk": "destructive"
+    },
+    {
+      "name": "discussion_comment_write",
+      "description": "Write operations for discussion comments.",
+      "risk": "destructive"
+    },
+    {
+      "name": "dismiss_notification",
+      "description": "Dismiss a notification by marking it as read or done",
+      "risk": "write"
+    },
+    {
+      "name": "find_duplicate",
+      "description": "Find likely duplicate issues for an existing issue in a GitHub repository.",
+      "risk": "read"
+    },
+    {
+      "name": "fork_repository",
+      "description": "Fork a GitHub repository to your account or specified organization",
+      "risk": "egress"
+    },
+    {
+      "name": "get_code_quality_finding",
+      "description": "Get details of a specific code quality finding in a GitHub repository.",
+      "risk": "read"
+    },
+    {
+      "name": "get_code_scanning_alert",
+      "description": "Get details of a specific code scanning alert in a GitHub repository.",
+      "risk": "read"
+    },
+    {
+      "name": "get_commit",
+      "description": "Get details for a commit from a GitHub repository",
+      "risk": "read"
+    },
+    {
+      "name": "get_dependabot_alert",
+      "description": "Get details of a specific dependabot alert in a GitHub repository.",
+      "risk": "read"
+    },
+    {
+      "name": "get_discussion",
+      "description": "Get a specific discussion by ID",
+      "risk": "read"
+    },
+    {
+      "name": "get_discussion_comments",
+      "description": "Get comments from a discussion",
+      "risk": "read"
+    },
+    {
+      "name": "get_file_blame",
+      "description": "Get git blame information for a file, showing the commit that last modified each line.",
+      "risk": "read"
+    },
+    {
+      "name": "get_file_contents",
+      "description": "Get the contents of a file or directory from a GitHub repository",
+      "risk": "read"
+    },
+    {
+      "name": "get_gist",
+      "description": "Get gist content of a particular gist, by gist ID",
+      "risk": "read"
+    },
+    {
+      "name": "get_global_security_advisory",
+      "description": "Get a global security advisory",
+      "risk": "read"
+    },
+    {
+      "name": "get_job_logs",
+      "description": "Download logs for a specific workflow job or efficiently get all failed job logs for a workflow run",
+      "risk": "read"
+    },
+    {
+      "name": "get_label",
+      "description": "Get a specific label from a repository.",
+      "risk": "read"
+    },
+    {
+      "name": "get_latest_release",
+      "description": "Get the latest release in a GitHub repository",
+      "risk": "read"
+    },
+    {
+      "name": "get_me",
+      "description": "Get details of the authenticated GitHub user.",
+      "risk": "read"
+    },
+    {
+      "name": "get_notification_details",
+      "description": "Get detailed information for a specific GitHub notification, always call this tool when the user asks for details about a specific notification, if you don't know the ID list notifications first.",
+      "risk": "read"
+    },
+    {
+      "name": "get_release_by_tag",
+      "description": "Get a specific release by its tag name in a GitHub repository",
+      "risk": "read"
+    },
+    {
+      "name": "get_repository_tree",
+      "description": "Get the tree structure (files and directories) of a GitHub repository at a specific ref or SHA",
+      "risk": "read"
+    },
+    {
+      "name": "get_secret_scanning_alert",
+      "description": "Get details of a specific secret scanning alert in a GitHub repository.",
+      "risk": "read"
+    },
+    {
+      "name": "get_tag",
+      "description": "Get details about a specific git tag in a GitHub repository",
+      "risk": "read"
+    },
+    {
+      "name": "get_team_members",
+      "description": "Get member usernames of a specific team in an organization.",
+      "risk": "read"
+    },
+    {
+      "name": "get_teams",
+      "description": "Get details of the teams the user is a member of.",
+      "risk": "read"
+    },
+    {
+      "name": "hide_issue_comment",
+      "description": "Hide (minimize) a comment on an issue, or a conversation comment on a pull request.",
+      "risk": "write"
+    },
+    {
+      "name": "hide_pull_request_review",
+      "description": "Hide (minimize) the body of a submitted pull request review.",
+      "risk": "write"
+    },
+    {
+      "name": "hide_pull_request_review_comment",
+      "description": "Hide (minimize) an inline review comment on a pull request diff.",
+      "risk": "write"
+    },
+    {
+      "name": "issue_dependency_read",
+      "description": "Read an issue's dependency relationships in a GitHub repository: the issues that block it (blocked_by) or the issues it blocks (blocking).",
+      "risk": "read"
+    },
+    {
+      "name": "issue_dependency_write",
+      "description": "Add or remove an issue dependency relationship in a GitHub repository.",
+      "risk": "write"
+    },
+    {
+      "name": "issue_read",
+      "description": "Get information about a specific issue in a GitHub repository.",
+      "risk": "read"
+    },
+    {
+      "name": "issue_write",
+      "description": "Create a new or update an existing issue in a GitHub repository.",
+      "risk": "egress"
+    },
+    {
+      "name": "label_write",
+      "description": "Perform write operations on repository labels.",
+      "risk": "destructive"
+    },
+    {
+      "name": "list_branches",
+      "description": "List branches in a GitHub repository",
+      "risk": "read"
+    },
+    {
+      "name": "list_code_scanning_alerts",
+      "description": "List code scanning alerts in a GitHub repository.",
+      "risk": "read"
+    },
+    {
+      "name": "list_commits",
+      "description": "Get list of commits of a branch in a GitHub repository.",
+      "risk": "read"
+    },
+    {
+      "name": "list_dependabot_alerts",
+      "description": "List dependabot alerts in a GitHub repository.",
+      "risk": "read"
+    },
+    {
+      "name": "list_discussion_categories",
+      "description": "List discussion categories with their id and name, for a repository or organisation.",
+      "risk": "read"
+    },
+    {
+      "name": "list_discussions",
+      "description": "List discussions for a repository or organisation.",
+      "risk": "read"
+    },
+    {
+      "name": "list_gists",
+      "description": "List gists for a user",
+      "risk": "read"
+    },
+    {
+      "name": "list_global_security_advisories",
+      "description": "List global security advisories from GitHub.",
+      "risk": "read"
+    },
+    {
+      "name": "list_issue_fields",
+      "description": "List issue fields for a repository or organization.",
+      "risk": "read"
+    },
+    {
+      "name": "list_issue_types",
+      "description": "List supported issue types for a repository or its owner organization.",
+      "risk": "read"
+    },
+    {
+      "name": "list_issues",
+      "description": "List issues in a GitHub repository.",
+      "risk": "read"
+    },
+    {
+      "name": "list_label",
+      "description": "List labels from a repository, ordered by issue count (descending) so the most-used labels are returned first.",
+      "risk": "read"
+    },
+    {
+      "name": "list_notifications",
+      "description": "Lists all GitHub notifications for the authenticated user, including unread notifications, mentions, review requests, assignments, and updates on issues or pull requests.",
+      "risk": "read"
+    },
+    {
+      "name": "list_org_repository_security_advisories",
+      "description": "List repository security advisories for a GitHub organization.",
+      "risk": "read"
+    },
+    {
+      "name": "list_pull_requests",
+      "description": "List pull requests in a GitHub repository.",
+      "risk": "read"
+    },
+    {
+      "name": "list_releases",
+      "description": "List releases in a GitHub repository",
+      "risk": "read"
+    },
+    {
+      "name": "list_repository_collaborators",
+      "description": "List collaborators of a GitHub repository.",
+      "risk": "read"
+    },
+    {
+      "name": "list_repository_security_advisories",
+      "description": "List repository security advisories for a GitHub repository.",
+      "risk": "read"
+    },
+    {
+      "name": "list_secret_scanning_alerts",
+      "description": "List secret scanning alerts in a GitHub repository.",
+      "risk": "read"
+    },
+    {
+      "name": "list_starred_repositories",
+      "description": "List starred repositories",
+      "risk": "read"
+    },
+    {
+      "name": "list_tags",
+      "description": "List git tags in a GitHub repository",
+      "risk": "read"
+    },
+    {
+      "name": "manage_notification_subscription",
+      "description": "Manage a notification subscription: ignore, watch, or delete a notification thread subscription.",
+      "risk": "write"
+    },
+    {
+      "name": "manage_repository_notification_subscription",
+      "description": "Manage a repository notification subscription: ignore, watch, or delete repository notifications subscription for the provided repository.",
+      "risk": "write"
+    },
+    {
+      "name": "mark_all_notifications_read",
+      "description": "Mark all notifications as read",
+      "risk": "write"
+    },
+    {
+      "name": "merge_pull_request",
+      "description": "Merge a pull request in a GitHub repository.",
+      "risk": "destructive"
+    },
+    {
+      "name": "projects_get",
+      "description": "Get details about specific GitHub Projects resources.",
+      "risk": "read"
+    },
+    {
+      "name": "projects_list",
+      "description": "Tools for listing GitHub Projects resources.",
+      "risk": "read"
+    },
+    {
+      "name": "projects_write",
+      "description": "Create and manage GitHub Projects: create projects, add/update/delete items, bulk-update many items at once, manage views, create status updates, and add iteration fields.",
+      "risk": "destructive"
+    },
+    {
+      "name": "pull_request_read",
+      "description": "Get information on a specific pull request in GitHub repository.",
+      "risk": "read"
+    },
+    {
+      "name": "pull_request_review_write",
+      "description": "Create and/or submit, delete review of a pull request.",
+      "risk": "egress"
+    },
+    {
+      "name": "push_files",
+      "description": "Push multiple files to a GitHub repository in a single commit",
+      "risk": "egress"
+    },
+    {
+      "name": "remove_issue_comment_reaction",
+      "description": "Remove a reaction from an issue or pull request comment.",
+      "risk": "write"
+    },
+    {
+      "name": "remove_issue_reaction",
+      "description": "Remove a reaction from an issue or pull request.",
+      "risk": "write"
+    },
+    {
+      "name": "remove_pull_request_review_comment_reaction",
+      "description": "Remove a reaction from a pull request review comment.",
+      "risk": "write"
+    },
+    {
+      "name": "remove_sub_issue",
+      "description": "Remove a sub-issue from a parent issue.",
+      "risk": "destructive"
+    },
+    {
+      "name": "repository_ruleset_read",
+      "description": "Read rulesets at the repository, organization, or enterprise level, and rule suites at the repository or organization level.",
+      "risk": "read"
+    },
+    {
+      "name": "reprioritize_sub_issue",
+      "description": "Reprioritize (reorder) a sub-issue relative to other sub-issues.",
+      "risk": "write"
+    },
+    {
+      "name": "request_copilot_review",
+      "description": "Request a GitHub Copilot code review for a pull request.",
+      "risk": "egress"
+    },
+    {
+      "name": "request_pull_request_reviewers",
+      "description": "Request reviewers for a pull request.",
+      "risk": "write"
+    },
+    {
+      "name": "resolve_review_thread",
+      "description": "Resolve a review thread on a pull request.",
+      "risk": "write"
+    },
+    {
+      "name": "search_code",
+      "description": "Fast and precise code search across ALL GitHub repositories using GitHub's native search engine.",
+      "risk": "read"
+    },
+    {
+      "name": "search_commits",
+      "description": "Search for commits across GitHub repositories using GitHub's commit search syntax.",
+      "risk": "read"
+    },
+    {
+      "name": "search_issues",
+      "description": "Search issues using natural-language semantic matching.",
+      "risk": "read"
+    },
+    {
+      "name": "search_orgs",
+      "description": "Find GitHub organizations by name, location, or other organization metadata.",
+      "risk": "read"
+    },
+    {
+      "name": "search_pull_requests",
+      "description": "Search for pull requests in GitHub repositories using issues search syntax already scoped to is:pr",
+      "risk": "read"
+    },
+    {
+      "name": "search_repositories",
+      "description": "Find GitHub repositories by name, description, readme, topics, or other metadata.",
+      "risk": "read"
+    },
+    {
+      "name": "search_users",
+      "description": "Find GitHub users by username, real name, or other profile information.",
+      "risk": "read"
+    },
+    {
+      "name": "set_issue_fields",
+      "description": "Set issue field values for an issue.",
+      "risk": "write"
+    },
+    {
+      "name": "star_repository",
+      "description": "Star a GitHub repository",
+      "risk": "write"
+    },
+    {
+      "name": "sub_issue_write",
+      "description": "Add a sub-issue to a parent issue in a GitHub repository.",
+      "risk": "write"
+    },
+    {
+      "name": "submit_pending_pull_request_review",
+      "description": "Submit a pending pull request review.",
+      "risk": "egress"
+    },
+    {
+      "name": "ui_get",
+      "description": "Fetch UI data for MCP Apps (labels, assignees, milestones, issue types, branches, issue fields, reviewers).",
+      "risk": "read"
+    },
+    {
+      "name": "unhide_issue_comment",
+      "description": "Unhide (unminimize) a previously hidden comment on an issue, or conversation comment on a pull request.",
+      "risk": "write"
+    },
+    {
+      "name": "unhide_pull_request_review",
+      "description": "Unhide (unminimize) the previously hidden body of a submitted pull request review.",
+      "risk": "write"
+    },
+    {
+      "name": "unhide_pull_request_review_comment",
+      "description": "Unhide (unminimize) a previously hidden inline review comment on a pull request diff.",
+      "risk": "write"
+    },
+    {
+      "name": "unresolve_review_thread",
+      "description": "Unresolve a previously resolved review thread on a pull request.",
+      "risk": "write"
+    },
+    {
+      "name": "unstar_repository",
+      "description": "Unstar a GitHub repository",
+      "risk": "write"
+    },
+    {
+      "name": "update_gist",
+      "description": "Update an existing gist",
+      "risk": "egress"
+    },
+    {
+      "name": "update_issue_assignees",
+      "description": "Update the assignees of an existing issue.",
+      "risk": "write"
+    },
+    {
+      "name": "update_issue_body",
+      "description": "Update the body content of an existing issue.",
+      "risk": "egress"
+    },
+    {
+      "name": "update_issue_comment",
+      "description": "Update the body of an existing issue or pull request conversation comment.",
+      "risk": "egress"
+    },
+    {
+      "name": "update_issue_labels",
+      "description": "Update the labels of an existing issue.",
+      "risk": "write"
+    },
+    {
+      "name": "update_issue_milestone",
+      "description": "Update the milestone of an existing issue.",
+      "risk": "write"
+    },
+    {
+      "name": "update_issue_state",
+      "description": "Update the state of an existing issue (open or closed), with an optional state reason.",
+      "risk": "write"
+    },
+    {
+      "name": "update_issue_title",
+      "description": "Update the title of an existing issue.",
+      "risk": "egress"
+    },
+    {
+      "name": "update_issue_type",
+      "description": "Set or remove the type of an existing issue.",
+      "risk": "write"
+    },
+    {
+      "name": "update_pull_request",
+      "description": "Update an existing pull request in a GitHub repository.",
+      "risk": "egress"
+    },
+    {
+      "name": "update_pull_request_body",
+      "description": "Update the body description of an existing pull request.",
+      "risk": "egress"
+    },
+    {
+      "name": "update_pull_request_branch",
+      "description": "Update the branch of a pull request with the latest changes from the base branch.",
+      "risk": "write"
+    },
+    {
+      "name": "update_pull_request_draft_state",
+      "description": "Mark a pull request as draft or ready for review.",
+      "risk": "write"
+    },
+    {
+      "name": "update_pull_request_state",
+      "description": "Update the state of an existing pull request (open or closed).",
+      "risk": "write"
+    },
+    {
+      "name": "update_pull_request_title",
+      "description": "Update the title of an existing pull request.",
+      "risk": "egress"
+    }
+  ],
+  "place": {
+    "egress": [
+      "api.github.com",
+      "raw.githubusercontent.com",
+      "*.actions.githubusercontent.com",
+      "*.blob.core.windows.net"
+    ],
+    "always_ask": [
+      "actions_run_trigger",
+      "create_repository_ruleset",
+      "delete_file",
+      "delete_pending_pull_request_review",
+      "delete_repository",
+      "discussion_comment_write",
+      "label_write",
+      "merge_pull_request",
+      "projects_write",
+      "remove_sub_issue"
+    ]
+  },
+  "config": [
+    {
+      "name": "token",
+      "type": "string",
+      "secret": true,
+      "required": true,
+      "env": "GITHUB_PERSONAL_ACCESS_TOKEN",
+      "description": "A GitHub personal access token (fine-grained recommended), kept in agentd's vault."
+    }
+  ],
+  "mcp_server": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+      "name": "io.github.github/github-mcp-server",
+      "description": "Connect AI assistants to GitHub - manage repos, issues, PRs, and workflows through natural language.",
+      "title": "GitHub",
+      "repository": {
+        "url": "https://github.com/github/github-mcp-server",
+        "source": "github"
+      },
+      "version": "2.0.3",
+      "packages": [
+        {
+          "registryType": "oci",
+          "identifier": "ghcr.io/github/github-mcp-server:2.0.3",
+          "transport": {
+            "type": "stdio"
+          },
+          "runtimeArguments": [
+            {
+              "description": "Publish the OAuth callback port to loopback so the in-container login callback is reachable",
+              "value": "127.0.0.1:8085:8085",
+              "type": "named",
+              "name": "-p"
+            },
+            {
+              "description": "Fixed OAuth callback port, matching the published port above",
+              "value": "GITHUB_OAUTH_CALLBACK_PORT=8085",
+              "type": "named",
+              "name": "-e"
+            },
+            {
+              "description": "Optional GitHub Personal Access Token. Omit to log in with OAuth on first use.",
+              "value": "GITHUB_PERSONAL_ACCESS_TOKEN={token}",
+              "variables": {
+                "token": {
+                  "format": "string",
+                  "isSecret": true
+                }
+              },
+              "type": "named",
+              "name": "-e"
+            }
+          ]
+        }
+      ],
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://api.githubcopilot.com/mcp/",
+          "headers": [
+            {
+              "description": "Authorization header with authentication token (PAT or App token)",
+              "isSecret": true,
+              "name": "Authorization"
+            }
+          ]
+        }
+      ]
+    },
+    "mode": "local",
+    "args": [
+      "stdio"
+    ],
+    "transport": "stdio"
+  },
+  "pricing": "free"
+}

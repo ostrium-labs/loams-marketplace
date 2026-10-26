@@ -1,0 +1,227 @@
+{
+  "id": "ostrium/plane-mcp-server",
+  "kind": "mcp-server",
+  "version": "0.3.5",
+  "title": "Plane",
+  "summary": "Plane's official MCP server, reached at its hosted endpoint with a personal access token.",
+  "description": "makeplane/plane-mcp-server 0.3.5 (MIT), reached at Plane's hosted streamable-HTTP endpoint https://mcp.plane.so/http/api-key/mcp with `Authorization: Bearer <token>` and `X-Workspace-slug` headers; nothing is installed. The local stdio package (`uvx plane-mcp-server`, PyPI) follows with the python runtime (MK1). Each of the 30 tools takes an `action`, and a tool's risk is its worst action, so most are destructive. Plane publishes no server.json, so the embedded one is written from the README.",
+  "licence": "MIT",
+  "source": {
+    "repository": "https://github.com/makeplane/plane-mcp-server",
+    "commit": "eb01d737472230c3e68ece75d12ceb7237b24e35"
+  },
+  "publisher": {
+    "name": "Plane",
+    "url": "https://plane.so"
+  },
+  "support": "https://github.com/makeplane/plane-mcp-server/issues",
+  "tools": [
+    {
+      "name": "collection",
+      "description": "Collections grouping workspace pages.",
+      "risk": "destructive"
+    },
+    {
+      "name": "customer",
+      "description": "Customers in the workspace.",
+      "risk": "destructive"
+    },
+    {
+      "name": "customer_property",
+      "description": "Custom properties on customers.",
+      "risk": "destructive"
+    },
+    {
+      "name": "customer_request",
+      "description": "Requests raised by a customer.",
+      "risk": "destructive"
+    },
+    {
+      "name": "cycle",
+      "description": "Cycles (time-boxed iterations) in a project.",
+      "risk": "destructive"
+    },
+    {
+      "name": "get_pql_reference",
+      "description": "Plane Query Language (PQL) syntax reference.",
+      "risk": "read"
+    },
+    {
+      "name": "initiative",
+      "description": "Workspace initiatives.",
+      "risk": "destructive"
+    },
+    {
+      "name": "intake",
+      "description": "The intake (triage) queue for a project.",
+      "risk": "destructive"
+    },
+    {
+      "name": "label",
+      "description": "Labels within a project.",
+      "risk": "destructive"
+    },
+    {
+      "name": "member",
+      "description": "Workspace and project members, and role definitions.",
+      "risk": "read"
+    },
+    {
+      "name": "milestone",
+      "description": "Milestones within a project.",
+      "risk": "destructive"
+    },
+    {
+      "name": "module",
+      "description": "Modules (feature groupings) in a project.",
+      "risk": "destructive"
+    },
+    {
+      "name": "page",
+      "description": "Pages at workspace or project scope.",
+      "risk": "destructive"
+    },
+    {
+      "name": "project",
+      "description": "Projects in a workspace.",
+      "risk": "destructive"
+    },
+    {
+      "name": "project_estimate",
+      "description": "A project's estimate system and its points.",
+      "risk": "destructive"
+    },
+    {
+      "name": "release",
+      "description": "Releases in the workspace.",
+      "risk": "destructive"
+    },
+    {
+      "name": "release_label",
+      "description": "Release labels, workspace palette and per release.",
+      "risk": "destructive"
+    },
+    {
+      "name": "release_tag",
+      "description": "Release tags (version markers).",
+      "risk": "destructive"
+    },
+    {
+      "name": "state",
+      "description": "Workflow states within a project.",
+      "risk": "destructive"
+    },
+    {
+      "name": "template",
+      "description": "Reusable templates for work items, pages and projects.",
+      "risk": "destructive"
+    },
+    {
+      "name": "work_log",
+      "description": "Time logged against a work item.",
+      "risk": "destructive"
+    },
+    {
+      "name": "workitem",
+      "description": "Work items: issues, tasks and epics.",
+      "risk": "destructive"
+    },
+    {
+      "name": "workitem_activity",
+      "description": "Change history for a work item.",
+      "risk": "read"
+    },
+    {
+      "name": "workitem_attachment",
+      "description": "Files attached to a work item.",
+      "risk": "destructive"
+    },
+    {
+      "name": "workitem_comment",
+      "description": "Comments on a work item.",
+      "risk": "destructive"
+    },
+    {
+      "name": "workitem_link",
+      "description": "External links attached to a work item.",
+      "risk": "destructive"
+    },
+    {
+      "name": "workitem_property",
+      "description": "Custom work item properties and their options.",
+      "risk": "destructive"
+    },
+    {
+      "name": "workitem_relation",
+      "description": "Relations between work items, and the definitions that type them.",
+      "risk": "destructive"
+    },
+    {
+      "name": "workitem_type",
+      "description": "Work item types, at project or workspace scope.",
+      "risk": "destructive"
+    },
+    {
+      "name": "workspace",
+      "description": "The connected workspace, and its feature flags.",
+      "risk": "write"
+    }
+  ],
+  "place": {
+    "egress": [
+      "mcp.plane.so"
+    ]
+  },
+  "config": [
+    {
+      "name": "api_key",
+      "type": "string",
+      "secret": true,
+      "required": true,
+      "description": "A Plane personal access token (Workspace Settings, API tokens), sent as the Bearer token."
+    },
+    {
+      "name": "workspace_slug",
+      "type": "string",
+      "required": true,
+      "description": "The Plane workspace slug, sent as the X-Workspace-slug header."
+    }
+  ],
+  "mcp_server": {
+    "server": {
+      "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+      "name": "io.github.makeplane/plane-mcp-server",
+      "description": "Plane's MCP server: projects, work items, cycles, modules, pages, releases and customers.",
+      "title": "Plane",
+      "repository": {
+        "url": "https://github.com/makeplane/plane-mcp-server",
+        "source": "github"
+      },
+      "version": "0.3.5",
+      "websiteUrl": "https://plane.so",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://mcp.plane.so/http/api-key/mcp",
+          "headers": [
+            {
+              "name": "Authorization",
+              "description": "Bearer <Plane personal access token>",
+              "isRequired": true,
+              "isSecret": true
+            },
+            {
+              "name": "X-Workspace-slug",
+              "description": "The Plane workspace slug",
+              "isRequired": true
+            }
+          ]
+        }
+      ]
+    },
+    "mode": "remote",
+    "remote_url": "https://mcp.plane.so/http/api-key/mcp",
+    "transport": "streamable-http"
+  },
+  "pricing": "free"
+}
