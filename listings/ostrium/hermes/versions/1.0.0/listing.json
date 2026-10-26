@@ -1,0 +1,34 @@
+{
+  "id": "ostrium/hermes",
+  "kind": "harness",
+  "version": "1.0.0",
+  "title": "Hermes",
+  "summary": "Nous Research's Hermes Agent driven by agentd's built-in adapter. The vendor's CLI is installed separately.",
+  "description": "A first-party descriptor of one of agentd's built-in harness adapters (design 73 section 8, D1464). The listing describes Loams' adapter, which is Apache-2.0 and ships inside loams-agentd; the vendor's CLI is installed separately (Settings can run the vendor's official installer) and found on PATH or through its `*_EXECUTABLE` override. The vendor's software is separate, under its own licence and terms. agentd launches it as `hermes acp` and speaks ACP over stdio; accounts are added with `hermes auth add`.",
+  "licence": "Apache-2.0",
+  "source": {
+    "repository": "https://github.com/ostrium-labs/loams",
+    "commit": "51708bb86e3d572c74285990c07cb972b05e5ff9",
+    "path": "crates/loams-agentd-harness/src/acp"
+  },
+  "publisher": {
+    "name": "Ostrium Labs",
+    "url": "https://ostriumlabs.org"
+  },
+  "support": "https://github.com/ostrium-labs/loams/issues",
+  "security_contact": "security@ostriumlabs.org",
+  "harness": {
+    "launch": {
+      "protocol": "native",
+      "command": "hermes",
+      "args": [
+        "acp"
+      ]
+    },
+    "auth": [
+      "cli-login"
+    ],
+    "native_adapter": "hermes"
+  },
+  "pricing": "free"
+}

@@ -1,0 +1,31 @@
+{
+  "id": "ostrium/antigravity",
+  "kind": "harness",
+  "version": "1.0.0",
+  "title": "Antigravity",
+  "summary": "Google's Antigravity ACP server driven by agentd's built-in adapter. agentd installs the vendor's pinned release archive itself.",
+  "description": "A first-party descriptor of one of agentd's built-in harness adapters (design 73 section 8, D1464). The listing describes Loams' adapter, which is Apache-2.0 and ships inside loams-agentd; agentd downloads the vendor's pinned release archive, checked by digest, into its own data directory. The vendor's software is separate, under its own licence and terms. agentd launches it as `agy_acp_server` (with `--uid=` on Linux) and speaks ACP over stdio; sign-in is Google OAuth in the browser.",
+  "licence": "Apache-2.0",
+  "source": {
+    "repository": "https://github.com/ostrium-labs/loams",
+    "commit": "51708bb86e3d572c74285990c07cb972b05e5ff9",
+    "path": "crates/loams-agentd-harness/src/acp"
+  },
+  "publisher": {
+    "name": "Ostrium Labs",
+    "url": "https://ostriumlabs.org"
+  },
+  "support": "https://github.com/ostrium-labs/loams/issues",
+  "security_contact": "security@ostriumlabs.org",
+  "harness": {
+    "launch": {
+      "protocol": "native",
+      "command": "agy_acp_server"
+    },
+    "auth": [
+      "oauth"
+    ],
+    "native_adapter": "antigravity"
+  },
+  "pricing": "free"
+}
